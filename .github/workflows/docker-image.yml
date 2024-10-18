@@ -1,11 +1,11 @@
-name: buildUptime Kuma
+name: Uptime Kuma
 
 on:
   push:
     branches:
-      - main  
-  workflow_dispatch:
- 
+      - main  # This will trigger the workflow on updates to the main branch
+  workflow_dispatch:  # Allows manual trigger
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,8 +33,10 @@ jobs:
 
       - name: Stop current Uptime Kuma container
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ubuntu@ec2-3-83-24-235.compute-1.amazonaws.com "docker stop uptime-kuma || true && docker rm uptime-kuma || true"
+          echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-3-83-24-235.compute-1.amazonaws.com "docker stop uptime-kuma || true && docker rm uptime-kuma || true"
 
       - name: Deploy new Uptime Kuma container
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ubuntu@ec2-3-83-24-235.compute-1.amazonaws.com "docker run -d --name uptime-kuma -p 3001:3001 -v /home/ubuntu/data:/app/data louislam/uptime-kuma:latest"
+          echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-3-83-24-235.compute-1.amazonaws.com "docker run -d --name uptime-kuma -p 3001:3001 -v ./data:/app/data louislam/uptime-kuma:latest"
