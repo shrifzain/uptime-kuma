@@ -34,7 +34,7 @@ jobs:
       - name: Debug SSH Connection
         run: |
          echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > private_key && chmod 600 private_key
-         ssh -o StrictHostKeyChecking=no -i private_key ubuntu@<EC2_PUBLIC_IP> 'echo "SSH connection successful"'
+         ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-3-83-24-235.compute-1.amazonaws.com 'echo "SSH connection successful"'
 
       - name: Stop current Uptime Kuma container
         run: |
