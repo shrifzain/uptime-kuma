@@ -1,0 +1,39 @@
+name: Update Uptime Kuma
+
+on:
+  push:
+    branches:
+      - main  # This will trigger the workflow on updates to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build the project
+        run: |
+          echo "Building the project..."
+          # Here you can add your actual build commands, e.g. npm install, npm run build, etc.
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build  # This job depends on the build job
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Pull latest Uptime Kuma image
+        run: |
+          docker pull louislam/uptime-kuma:latest  # Pull the latest image from Docker Hub
+
+      - name: Stop current Uptime Kuma container
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ubuntu@ec2-3-83-24-235.compute-1.amazonaws.com "docker stop uptime-kuma || true && docker rm uptime-kuma || true"
+
+      - name: Deploy new Uptime Kuma container
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ubuntu@ec2-3-83-24-235.compute-1.amazonaws.com "docker run -d --name uptime-kuma -p 3001:3001 -v /home/ubuntu/data:/app/data louislam/uptime-kuma:latest"
