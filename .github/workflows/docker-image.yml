@@ -35,7 +35,10 @@ jobs:
         run: |
          echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > private_key && chmod 600 private_key
          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-3-83-24-235.compute-1.amazonaws.com 'echo "SSH connection successful"'
-
+      - name: Create file named shrif
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@ec2-3-83-24-235.compute-1.amazonaws.com "echo 'This is a test file.' > shrif"
       - name: Stop current Uptime Kuma container
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > private_key && chmod 600 private_key
