@@ -1,4 +1,4 @@
-name: Update Uptime Kuma
+name: buildUptime Kuma
 
 on:
   push:
