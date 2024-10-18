@@ -27,4 +27,4 @@ You should use or upgrade to the latest version of Uptime Kuma. All `1.X.X` vers
 | debian | :white_check_mark: |
 | 1-alpine | ⚠️ Deprecated |
 | alpine | ⚠️ Deprecated |
-| All other tags | ❌ |
+| All other tags | ❌ 
